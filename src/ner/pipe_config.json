@@ -1,4 +1,13 @@
 {
+    "bloom-1b7-conversations": {
+        "model_id": "nqv2291/sft_bloom-1b7_Pile-NER-type",
+        "base_model_id": "",
+        "model_class": "AutoModelForCausalLM",
+        "tokenizer_class": "AutoTokenizer",
+        "tokenizer_configs": {},
+        "data_style": "conversations",
+        "context_length": 2048
+    },
     "tiny-llama-conversations": {
         "model_id": "LR-AI-Labs/tiny-universal-NER",
         "base_model_id": "",
@@ -12,7 +21,7 @@
         "model_id": "nqv2291/sft-mT5_base-Pile-NER",
         "base_model_id": "google/mt5-base",
         "model_class": "MT5ForConditionalGeneration",
-        "tokenizer_class": "MT5Tokenizer",
+        "tokenizer_class": "MT5TokenizerFast",
         "tokenizer_configs": {
             "bos_token": "<pad>",
             "sep_token": "</s>"
@@ -24,7 +33,7 @@
         "model_id": "nqv2291/sft-mT5_large-Pile-NER",
         "base_model_id": "google/mt5-large",
         "model_class": "MT5ForConditionalGeneration",
-        "tokenizer_class": "MT5Tokenizer",
+        "tokenizer_class": "MT5TokenizerFast",
         "tokenizer_configs": {
             "bos_token": "<pad>",
             "sep_token": "</s>"
