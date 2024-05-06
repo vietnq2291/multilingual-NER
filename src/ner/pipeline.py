@@ -1,6 +1,6 @@
 from transformers import (
     AutoTokenizer,
-    MT5Tokenizer,
+    MT5TokenizerFast,
     AutoModelForCausalLM,
     MT5ForConditionalGeneration,
 )
