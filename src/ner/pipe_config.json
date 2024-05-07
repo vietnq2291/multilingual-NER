@@ -36,7 +36,8 @@
         "tokenizer_class": "MT5TokenizerFast",
         "tokenizer_configs": {
             "bos_token": "<pad>",
-            "sep_token": "</s>"
+            "sep_token": "</s>",
+            "additional_special_tokens": ["[S2S]"]
         },
         "data_style": "instructions",
         "context_length": 1024
