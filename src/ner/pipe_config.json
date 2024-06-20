@@ -1,45 +1,34 @@
 {
-    "bloom-1b7-conversations": {
-        "model_id": "nqv2291/sft_bloom-1b7_Pile-NER-type",
-        "base_model_id": "",
-        "model_class": "AutoModelForCausalLM",
-        "tokenizer_class": "AutoTokenizer",
+    "mt0-base-open_ner_en_only": {
+        "model_id": "nqv2291/mt0_base-sft-open_ner_en_only",
+        "base_model_id": "bigscience/mt0-base",
+        "model_class": "MT5ForConditionalGeneration",
+        "tokenizer_class": "MT5TokenizerFast",
         "tokenizer_configs": {},
-        "data_style": "conversations",
-        "context_length": 2048
+        "context_length": 1024
     },
-    "tiny-llama-conversations": {
-        "model_id": "LR-AI-Labs/tiny-universal-NER",
-        "base_model_id": "",
-        "model_class": "AutoModelForCausalLM",
-        "tokenizer_class": "AutoTokenizer",
+    "mt0-large-open_ner_en_only": {
+        "model_id": "nqv2291/mt0_large-sft-open_ner_en_only",
+        "base_model_id": "bigscience/mt0-large",
+        "model_class": "MT5ForConditionalGeneration",
+        "tokenizer_class": "MT5TokenizerFast",
         "tokenizer_configs": {},
-        "data_style": "conversations",
-        "context_length": 2048
+        "context_length": 1024
     },
-    "mt5-base-instructions": {
-        "model_id": "nqv2291/sft-mT5_base-Pile-NER",
+    "mt5-base-mixed_lang_IT-open_ner_en": {
+        "model_id": "nqv2291/mt5_base-sft-en_vi_alpaca-open_ner_en",
         "base_model_id": "google/mt5-base",
         "model_class": "MT5ForConditionalGeneration",
         "tokenizer_class": "MT5TokenizerFast",
-        "tokenizer_configs": {
-            "bos_token": "<pad>",
-            "sep_token": "</s>"
-        },
-        "data_style": "instructions",
+        "tokenizer_configs": {},
         "context_length": 1024
     },
-    "mt5-large-instructions": {
-        "model_id": "nqv2291/sft-mT5_large-Pile-NER",
+    "mt5-large-mixed_lang_IT-open_ner_en": {
+        "model_id": "nqv2291/mt5_large-sft-en_vi_alpaca-open_ner_en",
         "base_model_id": "google/mt5-large",
         "model_class": "MT5ForConditionalGeneration",
         "tokenizer_class": "MT5TokenizerFast",
-        "tokenizer_configs": {
-            "bos_token": "<pad>",
-            "sep_token": "</s>",
-            "additional_special_tokens": ["[S2S]"]
-        },
-        "data_style": "instructions",
+        "tokenizer_configs": {},
         "context_length": 1024
     }
 }

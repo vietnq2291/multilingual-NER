@@ -22,8 +22,8 @@ def main():
         if entity_type == "":
             break
 
-        prompt = ner_pipe.data_formatter.gen_data_with_format(
-            text=text, entity_type=entity_type
+        prompt = ner_pipe.data_formatter.format_instruction_input(
+            text, entity_type
         )
         pred = ner_pipe.predict(prompt)
         print("Output:", pred)
