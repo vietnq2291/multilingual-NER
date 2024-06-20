@@ -1,3 +1,5 @@
 *__pycache__
 *.env
 *flagged/
+*wandb/
+src/data/datasets/

@@ -9,3 +9,6 @@ accelerate==0.31.0
 sentencepiece==0.2.0
 matplotlib==3.9.0
 gradio==4.36.1
+groq==0.9.0
+bitsandbytes==0.43.1
+PyYAML==6.0.1
