@@ -8,3 +8,4 @@ evaluate==0.4.2
 accelerate==0.31.0
 sentencepiece==0.2.0
 matplotlib==3.9.0
+gradio==4.36.1
