@@ -46,7 +46,7 @@ class PipelineNER:
             base_model_id, **pipe_config["tokenizer_configs"], trust_remote_code=True
         )
 
-        self.data_formatter = DataFormatter(self.tokenizer)
+        self.data_formatter = DataFormatter()
         self.max_length = pipe_config["context_length"]
 
     def _setup_usage(self):

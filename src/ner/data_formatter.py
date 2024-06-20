@@ -1,14 +1,12 @@
 class DataFormatter:
 
-    def __init__(self, tokenizer):
-        self.tokenizer = tokenizer
-
+    def __init__(self):
         self.system_prompt = (
             "Below is an instruction that describes a task, paired with an input that provides further context. "
             "Write a response that appropriately completes the request.\n\n"
         )
         self.query_template = (
-            lambda entity_type: f"What describes {entity_type} in the text?"
+            lambda entity_type: f"What describes {entity_type.lower()} in the text?"
         )
         self.instructions_template = {
             "input": lambda text, query: (
