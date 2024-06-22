@@ -4,7 +4,7 @@ import yaml
 
 class GroqApiGenerator:
 
-    def __init__(self):
+    def __init__(self, config_path='data/data_utils/config.yaml'):
         self.api_keys = self._load_api_keys()
         self.cur_idx = -1
 
@@ -13,17 +13,16 @@ class GroqApiGenerator:
         return Groq(api_key=self.api_keys[self.cur_idx])
 
     def _load_api_keys(self):
-        with open('data/data_utils/config.yaml', 'r') as file:
+        with open(self.config_path, 'r') as file:
             config = yaml.safe_load(file)
         self.api_keys = config['llama3_api_keys']
         return self.api_keys
 
 class Llama3DataGenerator:
 
-    def __init__(self, api_generator, tokenizer, num_total_samples):
+    def __init__(self, api_generator, num_total_samples):
         self.api_generator = api_generator
         self.client = api_generator.get_new_client()
-        self.tokenizer = tokenizer
         self.num_total_samples = num_total_samples
 
         self.max_err_count = len(api_generator.api_keys)
@@ -31,7 +30,7 @@ class Llama3DataGenerator:
         self.cur_sample_no = 0
 
 
-    def gen_data(self, samples):
+    def gen_ner_data(self, samples):
         ids, texts, entities = [], [], []
 
         for idx, text in zip(samples['id'], samples['text']):
@@ -65,6 +64,39 @@ class Llama3DataGenerator:
             'text': texts,
             'entities': entities,
         }
+
+    def gen_prompt_data(self, message, verbose=False):
+        while True:
+            if self.cur_err_count >= self.max_err_count:
+                print('Too many errors, stopping...')
+                break
+            if verbose:
+                print(f'generate sample no {self.cur_sample_no}/{self.num_total_samples}...')
+            try:
+                out = self.prompt_api(message)
+                self.cur_sample_no += 1
+                self.cur_err_count = 0
+                return out
+            except RateLimitError as e:
+                print('Rate limit error, changing api...')
+                self.client = self.api_generator.get_new_client()
+                self.cur_err_count += 1
+                continue
+            except Exception as e:
+                print(e)
+            break
+
+    def prompt_api(self, message):
+        completion = self.client.chat.completions.create(
+            model="llama3-70b-8192",
+            messages=message,
+            temperature=0,
+            max_tokens=1024,
+            stream=False,
+            seed=42
+        )
+
+        return completion.choices[0].message.content
 
     def ner_api(self, passage):
         completion = self.client.chat.completions.create(

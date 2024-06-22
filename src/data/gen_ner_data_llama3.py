@@ -58,10 +58,10 @@ def main():
 
     # Load api client generator
     api_generator = GroqApiGenerator()
-    data_generator = Llama3DataGenerator(api_generator, tokenizer, corpus.num_rows)
+    data_generator = Llama3DataGenerator(api_generator, corpus.num_rows)
     print('Generating data with llama3....')
     corpus_generated = corpus.map(
-        lambda samples: data_generator.gen_data(samples),
+        lambda samples: data_generator.gen_ner_data(samples),
         batched=True,
         remove_columns=corpus.column_names,
     )
