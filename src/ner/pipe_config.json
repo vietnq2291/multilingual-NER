@@ -1,4 +1,20 @@
 {
+    "mt5-base-open_ner_en_only": {
+        "model_id": "nqv2291/mt5_base-sft-open_ner_en_only",
+        "base_model_id": "google/mt5-base",
+        "model_class": "MT5ForConditionalGeneration",
+        "tokenizer_class": "MT5TokenizerFast",
+        "tokenizer_configs": {},
+        "context_length": 1024
+    },
+    "mt5-large-open_ner_en_only": {
+        "model_id": "nqv2291/mt5_large-sft-open_ner_en_only",
+        "base_model_id": "google/mt5-large",
+        "model_class": "MT5ForConditionalGeneration",
+        "tokenizer_class": "MT5TokenizerFast",
+        "tokenizer_configs": {},
+        "context_length": 1024
+    },
     "mt0-base-open_ner_en_only": {
         "model_id": "nqv2291/mt0_base-sft-open_ner_en_only",
         "base_model_id": "bigscience/mt0-base",
@@ -26,6 +42,22 @@
     "mt5-large-mixed_lang_IT-open_ner_en": {
         "model_id": "nqv2291/mt5_large-sft-en_vi_alpaca-open_ner_en",
         "base_model_id": "google/mt5-large",
+        "model_class": "MT5ForConditionalGeneration",
+        "tokenizer_class": "MT5TokenizerFast",
+        "tokenizer_configs": {},
+        "context_length": 1024
+    },
+    "mt0-base-open_ner_en-mix-QA_vi": {
+        "model_id": "nqv2291/mt0_base-sft-open_ner_en-mix-QA_vi",
+        "base_model_id": "bigscience/mt0-base",
+        "model_class": "MT5ForConditionalGeneration",
+        "tokenizer_class": "MT5TokenizerFast",
+        "tokenizer_configs": {},
+        "context_length": 1024
+    },
+    "mt0-large-open_ner_en-mix-QA_vi": {
+        "model_id": "nqv2291/mt0_large-sft-open_ner_en-mix-QA_vi",
+        "base_model_id": "bigscience/mt0-large",
         "model_class": "MT5ForConditionalGeneration",
         "tokenizer_class": "MT5TokenizerFast",
         "tokenizer_configs": {},

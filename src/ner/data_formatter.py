@@ -23,6 +23,7 @@ class DataFormatter:
     def format_output(self, output):
         try:
             output = eval(output)
+            assert isinstance(output, list)
         except:
             output = []
         return output
