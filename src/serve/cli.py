@@ -22,10 +22,7 @@ def main():
         if entity_type == "":
             break
 
-        prompt = ner_pipe.data_formatter.format_instruction_input(
-            text, entity_type
-        )
-        pred = ner_pipe.predict(prompt)
+        pred = ner_pipe.predict(text=text, entity_type=entity_type, format_output=True, format_prompt=True)
         print("Output:", pred)
         print("----------------------------------")
 

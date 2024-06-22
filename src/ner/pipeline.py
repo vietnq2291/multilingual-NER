@@ -17,7 +17,14 @@ class PipelineNER:
         self._load_pipe_from_config()
         self._setup_usage()
 
-    def predict(self, raw_input, format_output=True):
+    def predict(self, format_output=True, format_prompt=False, **kwargs):
+        if format_prompt:
+            raw_input = self.data_formatter.format_instruction_input(
+                kwargs["text"], kwargs["entity_type"]
+            )
+        else:
+            raw_input = kwargs["prompt"]
+
         input_tokenized = self.tokenizer(raw_input, add_special_tokens=True)
         input_ids = torch.tensor(input_tokenized["input_ids"]).unsqueeze(0).to(self.device)
         attention_mask = torch.tensor(input_tokenized["attention_mask"]).unsqueeze(0).to(self.device)
@@ -32,7 +39,41 @@ class PipelineNER:
         if format_output:
             output = self.data_formatter.format_output(output)
         return output
-    
+  
+    def evaluate(self, eval_dataset):
+        # Eval dataset must have 3 fields: "text", "entity_type", "label"
+        print(f'Evaluating dataset: {eval_dataset} ...')
+
+        # Make predictions
+        preds = eval_dataset.map(lambda x: {'pred': self.predict(**x, format_prompt=True)})['pred']
+        labels = eval_dataset['label']
+
+        # Calculate metrics
+        f1_score = self.calculate_f1(preds, labels)
+        return {
+            'f1_score': f1_score,
+        }
+
+
+    def calculate_f1(self, preds, labels):
+        set_preds = [set(pred) for pred in preds]
+        set_labels = [set(label) for label in labels]
+
+        tp = sum([len(pred & label) for pred, label in zip(set_preds, set_labels)])
+        fp = sum([len(pred - label) for pred, label in zip(set_preds, set_labels)])
+        fn = sum([len(label - pred) for pred, label in zip(set_preds, set_labels)])
+
+        print(f'TP: {tp}, FP: {fp}, FN: {fn}')
+
+        precision = tp / (tp + fp)
+        print(f'Precision: {precision}')
+        recall = tp / (tp + fn)
+        print(f'Recall: {recall}')
+        f1_score = 2 * (precision * recall) / (precision + recall)
+        print(f'F1 Score: {f1_score}')
+
+        return f1_score
+
     def _load_pipe_from_config(self):
         pipe_config = get_pipe_config(self.pipe_config_id, sys.modules[__name__])
 

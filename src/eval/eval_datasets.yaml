@@ -1,0 +1,4 @@
+# list of evaluation dataset paths
+datasets:
+  - "nqv2291/eval-vi-ner-vlsp-GOLD"
+  
