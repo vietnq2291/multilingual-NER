@@ -62,5 +62,13 @@
         "tokenizer_class": "MT5TokenizerFast",
         "tokenizer_configs": {},
         "context_length": 1024
+    },
+    "mt0-large-open_ner_en-mix-QA_vi--open_ner_en_vi": {
+        "model_id": "nqv2291/mt0_large-sft-open_ner_en-mix-QA_vi__open_ner_en_vi",
+        "base_model_id": "bigscience/mt0-large",
+        "model_class": "MT5ForConditionalGeneration",
+        "tokenizer_class": "MT5TokenizerFast",
+        "tokenizer_configs": {},
+        "context_length": 1024
     }
 }
