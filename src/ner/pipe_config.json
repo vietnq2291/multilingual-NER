@@ -70,5 +70,13 @@
         "tokenizer_class": "MT5TokenizerFast",
         "tokenizer_configs": {},
         "context_length": 1024
+    },
+    "mT0-large-multitasks": {
+        "model_id": "nqv2291/mt0_large-sft-multitasks",
+        "base_model_id": "bigscience/mt0-large",
+        "model_class": "MT5ForConditionalGeneration",
+        "tokenizer_class": "MT5TokenizerFast",
+        "tokenizer_configs": {},
+        "context_length": 1024
     }
 }

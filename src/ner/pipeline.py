@@ -19,45 +19,79 @@ class PipelineNER:
 
     def predict(self, format_output=True, format_prompt=False, **kwargs):
         if format_prompt:
-            raw_input = self.data_formatter.format_instruction_input(
-                kwargs["text"], kwargs["entity_type"]
-            )
+            if self.usage == "evaluate":
+                # Format prompt for each sample in the evaluation batch
+                raw_input = [self.data_formatter.format_instruction_input(text, entity_type) for text, entity_type in zip(kwargs["samples"]["text"], kwargs["samples"]["entity_type"])]
+            else:
+                raw_input = self.data_formatter.format_instruction_input(
+                    kwargs["text"], kwargs["entity_type"]
+                )
         else:
             raw_input = kwargs["prompt"]
 
-        input_tokenized = self.tokenizer(raw_input, add_special_tokens=True)
-        input_ids = torch.tensor(input_tokenized["input_ids"]).unsqueeze(0).to(self.device)
-        attention_mask = torch.tensor(input_tokenized["attention_mask"]).unsqueeze(0).to(self.device)
+        if self.usage == "evaluate":
+            # Tokenize the inputs for evaluation
+            input_tokenized = self.tokenizer(raw_input, add_special_tokens=True, padding=True, truncation=True, return_tensors="pt")
+            input_ids = input_tokenized["input_ids"].to(self.device)
+            attention_mask = input_tokenized["attention_mask"].to(self.device)
+        else:
+            input_tokenized = self.tokenizer(raw_input, add_special_tokens=True)
+            input_ids = torch.tensor(input_tokenized["input_ids"]).unsqueeze(0).to(self.device)
+            attention_mask = torch.tensor(input_tokenized["attention_mask"]).unsqueeze(0).to(self.device)
 
+        # Generate outputs
         output_ids = self.model.generate(
             input_ids=input_ids,
             attention_mask=attention_mask,
             max_length=self.max_length,
-        )[0]
-        output = self.tokenizer.decode(output_ids, skip_special_tokens=True)
+        )
+
+        if self.usage == "evaluate":
+            # Decode the outputs for evaluation
+            outputs = [self.tokenizer.decode(ids, skip_special_tokens=True) for ids in output_ids]
+        else:
+            output = self.tokenizer.decode(output_ids[0], skip_special_tokens=True)
 
         if format_output:
-            output = self.data_formatter.format_output(output)
-        return output
+            if self.usage == "evaluate":
+                outputs = [self.data_formatter.format_output(o) for o in outputs]
+            else:
+                output = self.data_formatter.format_output(output)
+
+        return outputs if self.usage == "evaluate" else output
+
   
-    def evaluate(self, eval_dataset):
+    def evaluate(self, eval_dataset, batch_size=1, report=False):
         # Eval dataset must have 3 fields: "text", "entity_type", "label"
         print(f'Evaluating dataset: {eval_dataset} ...')
 
         # Make predictions
-        preds = eval_dataset.map(lambda x: {'pred': self.predict(**x, format_prompt=True)})['pred']
+        preds = eval_dataset.map(
+            lambda x: {'pred': self.predict(samples=x, format_prompt=True)},
+            batched=True,
+            # set number of samples per batch
+            batch_size=batch_size,
+        )['pred']
         labels = eval_dataset['label']
 
         # Calculate metrics
-        f1_score = self.calculate_f1(preds, labels)
+        f1_score, list_correct = self.calculate_f1(preds, labels, report=report)
+        if report:
+            df_report = eval_dataset.to_pandas()
+            df_report['is_correct'] = list_correct
+            df_report.to_csv('eval/eval_report.csv', index=False)
+
         return {
             'f1_score': f1_score,
         }
 
 
-    def calculate_f1(self, preds, labels):
+    def calculate_f1(self, preds, labels, report=False):
         set_preds = [set(pred) for pred in preds]
         set_labels = [set(label) for label in labels]
+
+        if report:
+            list_correct = [1 if pred == label else 0 for pred, label in zip(set_preds, set_labels)]
 
         tp = sum([len(pred & label) for pred, label in zip(set_preds, set_labels)])
         fp = sum([len(pred - label) for pred, label in zip(set_preds, set_labels)])
@@ -72,7 +106,9 @@ class PipelineNER:
         f1_score = 2 * (precision * recall) / (precision + recall)
         print(f'F1 Score: {f1_score}')
 
-        return f1_score
+        if report:
+            return f1_score, list_correct
+        return f1_score, None
 
     def _load_pipe_from_config(self):
         pipe_config = get_pipe_config(self.pipe_config_id, sys.modules[__name__])
