@@ -72,7 +72,11 @@ class PipelineNER:
             # set number of samples per batch
             batch_size=batch_size,
         )['pred']
-        labels = eval_dataset['label']
+        # convert to list for all values in labels
+        if eval_dataset.features['label'].dtype != 'list':
+            labels = [eval(x['label']) for x in eval_dataset]
+        else:
+            labels = eval_dataset['label']
 
         # Calculate metrics
         f1_score, list_correct = self.calculate_f1(preds, labels, report=report)
