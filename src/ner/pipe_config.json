@@ -78,5 +78,37 @@
         "tokenizer_class": "MT5TokenizerFast",
         "tokenizer_configs": {},
         "context_length": 1024
+    },
+    "mt0-large-open_ner_en-mix-QA_vi--open_ner_en_vi--covid19_1k": {
+        "model_id": "nqv2291/mt0_large-sft-open_ner_en-mix-QA_vi__open_ner_en_vi__ner-covid19_1k",
+        "base_model_id": "bigscience/mt0-large",
+        "model_class": "MT5ForConditionalGeneration",
+        "tokenizer_class": "MT5TokenizerFast",
+        "tokenizer_configs": {},
+        "context_length": 1024
+    },
+    "mt0-large-open_ner_en-mix-QA_vi--open_ner_en_vi--covid19_5k": {
+        "model_id": "nqv2291/mt0_large-sft-open_ner_en-mix-QA_vi__open_ner_en_vi__ner-covid19_5k",
+        "base_model_id": "bigscience/mt0-large",
+        "model_class": "MT5ForConditionalGeneration",
+        "tokenizer_class": "MT5TokenizerFast",
+        "tokenizer_configs": {},
+        "context_length": 1024
+    },
+    "mt0-large-open_ner_en-mix-QA_vi--open_ner_en_vi--covid19_full": {
+        "model_id": "nqv2291/mt0_large-sft-open_ner_en-mix-QA_vi__open_ner_en_vi__ner-covid19_full",
+        "base_model_id": "bigscience/mt0-large",
+        "model_class": "MT5ForConditionalGeneration",
+        "tokenizer_class": "MT5TokenizerFast",
+        "tokenizer_configs": {},
+        "context_length": 1024
+    },
+    "mt0-large-open_ner_en-mix-QA_vi--open_ner_en_vi--vlsp-2021": {
+        "model_id": "nqv2291/mt0_large-sft-open_ner_en-mix-QA_vi__open_ner_en_vi__vlsp_2021",
+        "base_model_id": "bigscience/mt0-large",
+        "model_class": "MT5ForConditionalGeneration",
+        "tokenizer_class": "MT5TokenizerFast",
+        "tokenizer_configs": {},
+        "context_length": 1024
     }
 }
