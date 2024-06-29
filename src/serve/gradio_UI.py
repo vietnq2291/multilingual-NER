@@ -16,7 +16,11 @@ def get_completion(model_path, input_text, entity_type, data_formatter):
     data = {
         "inputs": data_formatter.format_instruction_input(
             input_text, entity_type
-        )
+        ),
+        "parameters": {
+            "max_length": 1024,
+            "temperature": 0,
+        }
     }
     response = requests.request(
         "POST",
