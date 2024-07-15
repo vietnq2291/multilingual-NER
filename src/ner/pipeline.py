@@ -79,9 +79,10 @@ class PipelineNER:
             labels = eval_dataset['label']
 
         # Calculate metrics
-        f1_score, list_correct = self.calculate_f1(preds, labels, report=report)
+        f1_score, list_correct, list_preds = self.calculate_f1(preds, labels, report=report)
         if report:
             df_report = eval_dataset.to_pandas()
+            df_report['pred'] = list_preds
             df_report['is_correct'] = list_correct
             # df_report.to_csv('eval/eval_report.csv', index=False)
             df_report.to_excel('eval/eval_report.xlsx')
@@ -112,8 +113,8 @@ class PipelineNER:
         print(f'F1 Score: {f1_score}')
 
         if report:
-            return f1_score, list_correct
-        return f1_score, None
+            return f1_score, list_correct, [list(pred) for pred in set_preds]
+        return f1_score, None, None
 
     def _load_pipe_from_config(self):
         pipe_config = get_pipe_config(self.pipe_config_id, sys.modules[__name__])
