@@ -83,7 +83,8 @@ class PipelineNER:
         if report:
             df_report = eval_dataset.to_pandas()
             df_report['is_correct'] = list_correct
-            df_report.to_csv('eval/eval_report.csv', index=False)
+            # df_report.to_csv('eval/eval_report.csv', index=False)
+            df_report.to_excel('eval/eval_report.xlsx')
 
         return {
             'f1_score': f1_score,
